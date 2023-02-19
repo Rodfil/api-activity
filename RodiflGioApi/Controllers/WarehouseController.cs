@@ -11,73 +11,40 @@ namespace RodiflGioApi.Controllers
     public class WarehouseController : ControllerBase
     {
         private readonly ApiDbContext _dbContext;
-        private readonly WarehouseLogic _logic;
+        private readonly WarehouseLogic _warehouseLogic;
 
         public WarehouseController(ApiDbContext dbContext)
         {
             _dbContext = dbContext;
-            _logic = new WarehouseLogic(_dbContext);
+            _warehouseLogic = new WarehouseLogic(_dbContext);
 
 
         }
         [HttpGet]
         public async Task<ActionResult<List<WarehouseDTO>>> GetAlPeople()
         {
-            return _logic.ToWarehouseDTO();
+            return _warehouseLogic.ToWarehouseDTO();
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] Warehouse_PostDTO data)
         {
-            if (data == null)
-            {
-                return BadRequest();
-            }
-
-            _logic.InsertData(data);
-
+            _warehouseLogic.InsertData(data);
             return Ok();
         }
 
         [HttpPut("{WarehouseId}")]
-
-        public async Task<ActionResult> UpdateData(Guid WarehouseId, [FromBody] WarehouseDTO updateData)
+        public IActionResult UpdateData(WarehouseDTO data)
         {
-            var exist = await _dbContext.Warehouse.FindAsync(WarehouseId);
-
-            if (exist == null)
-            {
-                return BadRequest();
-            }
-
-            exist.WarehouseName = updateData.WarehouseName;
-            exist.WarehouseCode = updateData.WarehouseCode;
-
-            await _dbContext.SaveChangesAsync();
-
-            return NoContent();
+            _warehouseLogic.UpdateData(data);
+            return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<List<WarehouseDTO>>> DeleteAddress(Guid id)  
+        [HttpDelete("{WarehouseId}")]
+        public IActionResult DeleteData(Guid WarehouseId)
         {
-            var warehouse = _dbContext.Warehouse.FirstOrDefault(a => a.WarehouseId == id);
-
-            if (warehouse == null)
-            {
-                return NotFound();
-            }
-
-            var warehousePeopleToDelete = _dbContext.Warehouse_People.Where(a => a.WarehouseId == id).ToList();
-
-            foreach (var people in warehousePeopleToDelete)
-            {
-                _dbContext.Warehouse_People.Remove(people); 
-            }
-
-            _dbContext.Warehouse.Remove(warehouse);
-            _dbContext.SaveChanges();
-            return NoContent();
+            _warehouseLogic.DeleteData(WarehouseId);
+            return Ok();
         }
     }
 }
