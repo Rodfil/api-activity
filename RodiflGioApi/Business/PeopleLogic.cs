@@ -1,5 +1,6 @@
 ﻿using RodiflGioApi.DataAccess;
 using RodiflGioApi.DTO;
+using RodiflGioApi.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RodiflGioApi.Business
@@ -31,13 +32,40 @@ namespace RodiflGioApi.Business
             }
             return addModels;
         }
-    }
-   /* public void AddPeople(List<PeopleDTO> data)
-    {
-        var add = new List<PeopleDTO>
+
+        public void InsertData(PeoplePostDTO data)
         {
-            PeopleId = data.PeopleId;
-            
+            People role = new People
+            {
+                PeopleId = Guid.NewGuid(),  
+                Name = data.Name,
+                PhoneNumber = data.PhoneNumber,
+                EmailAddress = data.EmailAddress,
+                Age = data.Age,
+                AddressId = data.AddressId,
+                RoleId = data.RoleId,
+            };
+
+            _dbcontext.People.Add(role);
+            _dbcontext.SaveChanges();
+
         }
-    }*/
+
+        public void UpdateData(RoleDTO roleDTO)
+        {
+            var exist = _dbcontext.Role.Find(roleDTO.RoleId);
+
+            if (exist != null)
+            {
+                exist.RoleName = roleDTO.RoleName;
+                exist.RoleCode = roleDTO.RoleCode;
+
+                _dbcontext.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Warehouse not found");
+            }
+        }
+    }
 }

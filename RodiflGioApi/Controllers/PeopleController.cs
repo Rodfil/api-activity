@@ -12,45 +12,26 @@ namespace RodiflGioApi.Controllers
     public class PeopleController : ControllerBase
     {
         private readonly ApiDbContext _dbContext;
-        private readonly PeopleLogic _logic;
+        private readonly PeopleLogic _peopleLogic;
 
 
         public PeopleController(ApiDbContext dbContext)
         {
             _dbContext = dbContext;
-            _logic = new PeopleLogic(_dbContext);
+            _peopleLogic = new PeopleLogic(_dbContext);
            
         }
         [HttpGet]
         public async Task<ActionResult<List<PeopleDTO>>> GetAlPeople()
         {
-            return _logic.ToPeopleDTO();
+            return _peopleLogic.ToPeopleDTO();
         }
 
-        /*public PeopleDTO Get_peopleDTO()
+        [HttpPost]
+        public IActionResult Create([FromBody] PeoplePostDTO data)
         {
-            return _peopleDTO;
-        }
-
-        [HttpPost]*/
-/*        public IActionResult Create([FromBody] PeopleDTO _peopleDTO)
-        {
-            if(peopleDTO == null)
-            {
-                return BadRequest();
-            }
-            var newData = new PeopleDTO
-            {
-                Name = peopleDTO.Name,
-                PhoneNumber = peopleDTO.PhoneNumber,
-                EmailAddress = peopleDTO.EmailAddress,
-                Age = peopleDTO.Age,
-            };
-            _peopleDTO.PeopleDTO.Add(newData);
-            _peopleDTO.peopleDTO.SaveChanges();
-
+            _peopleLogic.InsertData(data);
             return Ok();
-        }*/
-    
+        }
     }
 }

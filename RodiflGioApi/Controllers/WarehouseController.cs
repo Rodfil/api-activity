@@ -34,9 +34,9 @@ namespace RodiflGioApi.Controllers
         }
 
         [HttpPut("{WarehouseId}")]
-        public IActionResult UpdateData(WarehouseDTO data)
+        public IActionResult UpdateData(WarehouseDTO WarehouseId)
         {
-            _warehouseLogic.UpdateData(data);
+            _warehouseLogic.UpdateData(WarehouseId);
             return Ok();
         }
 

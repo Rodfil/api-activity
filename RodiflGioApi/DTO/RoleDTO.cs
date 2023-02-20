@@ -6,7 +6,13 @@ namespace RodiflGioApi.DTO
     {
         [Key]
         public Guid RoleId { get; set; }
-        public string RoleName { get; set; }
-        public string RoleCode { get; set; }
+        public string? RoleName { get; set; }
+        public string? RoleCode { get; set; }
+    }
+
+    public class RolePostDTO
+    {
+        public string? RoleName { get; set; }
+        public string? RoleCode { get; set; }
     }
 }
